@@ -8,12 +8,15 @@ FIND_PACKAGE( OpenCV 3.0.0 REQUIRED)
 MESSAGE("OpenCV version : ${OpenCV_VERSION}")
 include_directories(${OpenCV_INCLUDE_DIRS})
 link_directories(${OpenCV_LIB_DIR})
-#Create a variable called SRC
-SET(SRC main.cpp
-        utils.cpp
-        colors.cpp
-        )
-#Create our executable
-ADD_EXECUTABLE( ${PROJECT_NAME} ${SRC})
+
+add_subdirectory(utils)
+
+#Add optional log with a precompiler definition
+option(WITH_LOG "Build with output logs and images in tmp" OFF)
+if(WITH_LOG)
+    add_definitions(-DLOG)
+endif(WITH_LOG)
+#generate our new executable
+ADD_EXECUTABLE( ${PROJECT_NAME} main.cpp)
 #Link our library
-TARGET_LINK_LIBRARIES( ${PROJECT_NAME} ${OpenCV_LIBS})
+TARGET_LINK_LIBRARIES( ${PROJECT_NAME} ${OpenCV_LIBS} Utils)
